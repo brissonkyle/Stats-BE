@@ -29,8 +29,24 @@ def user_post():
 
 @app.patch('/api/user')
 def user_patch():
-    pass
+    user_resp = request.json
+    token = user_resp.get('token')
+    password = user_resp.get('password')
+    bannerUrl = user_resp.get('bannerUrl')
+    profileUrl = user_resp.get('profileUrl')
+    if token:
+        run_query('UPDATE user SET password=?, bannerUrl=?, profileUrl=? WHERE token=?', [password,bannerUrl,profileUrl,token])
+        return jsonify('User updated'), 201
+    if not token:
+        return jsonify('Must provide a valid session token'), 401
 
 @app.delete('/api/user')
 def user_delete():
-    pass
+    user_resp = request.json
+    token = user_resp.get('token')
+    email = user_resp.get('email')
+    if token:
+        run_query('DELETE FROM user WHERE email=?', [email])
+        return jsonify('User Deleted'), 200
+    if not token:
+        return jsonify('Must provide a valid session token'), 401
