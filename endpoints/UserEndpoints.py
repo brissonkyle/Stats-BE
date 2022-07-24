@@ -2,6 +2,13 @@
 from helpers.db_helpers import run_query
 from app import Flask, request, Response, jsonify, json, app
 
+def grabId(email,password):
+    result = run_query('SELECT id FROM user WHERE email=? AND password=?',[email,password])
+    if result == []:
+        return None
+    user_id = result[0][0]
+    return user_id
+
 @app.get('/api/user')
 def user_get():
     user_data = run_query('SELECT username,email,password,bannerUrl,profileUrl FROM user')
@@ -9,10 +16,8 @@ def user_get():
     for data in user_data:
         userObj = {}
         userObj['username'] = data[0]
-        userObj['email'] = data[1]
-        userObj['password'] = data[2]
-        userObj['bannerUrl'] = data[3]
-        userObj['profileUrl'] = data[4]
+        userObj['bannerUrl'] = data[1]
+        userObj['profileUrl'] = data[2]
         resp.append(userObj)
     return jsonify(resp), 200
 
