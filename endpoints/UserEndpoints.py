@@ -11,7 +11,7 @@ def grabId(email,password):
 
 @app.get('/api/user')
 def user_get():
-    user_data = run_query('SELECT username,email,password,bannerUrl,profileUrl FROM user')
+    user_data = run_query('SELECT username,bannerUrl,profileUrl FROM user')
     resp = []
     for data in user_data:
         userObj = {}
